@@ -1,0 +1,383 @@
+/**
+ * Custom layout/chrome CSS for the MMC Community Pass prototype. Living
+ * Design components carry their own visual language (color, type, radii);
+ * this file only handles layout, the phone-simulation frame, the bottom nav,
+ * and the desktop stakeholder shell — none of which are LD components.
+ */
+
+/* ── App-level layout ────────────────────────────────────────────────── */
+
+.mmc-app-mobile {
+  min-height: 100vh;
+  background: var(--ld-semantic-color-background-surface, #faf6f1);
+}
+
+.mmc-app-desktop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 48px;
+  min-height: 100vh;
+  padding: 32px;
+  box-sizing: border-box;
+  background: #eef0f2;
+}
+
+.mmc-phone-frame {
+  flex: 0 0 auto;
+  width: 390px;
+  max-width: 100%;
+  border-radius: 36px;
+  border: 10px solid #1b1f24;
+  background: #1b1f24;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  /* Positioned here (not on the scrollable __screen below) so absolutely
+     positioned overlays — e.g. the completion sheet's scrim — anchor to the
+     device's fixed visible bounds rather than to the inner scroll container's
+     content box. If __screen were the containing block, scrolling Home before
+     opening the sheet would carry the scrim's `inset: 0` position along with
+     the scrolled content, shifting it out of view instead of covering the
+     visible screen. */
+  position: relative;
+}
+
+.mmc-phone-frame__screen {
+  height: 844px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--ld-semantic-color-background-surface, #faf6f1);
+  border-radius: 26px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Shared screen chrome ─────────────────────────────────────────────── */
+
+.mmc-screen {
+  padding: 16px;
+  padding-bottom: 96px; /* clears the fixed bottom nav */
+  flex: 1;
+}
+
+.mmc-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 8px;
+  border-bottom: 1px solid var(--ld-semantic-color-border-subtle, #e3e4e5);
+  position: sticky;
+  top: 0;
+  background: var(--ld-semantic-color-background-surface, #faf6f1);
+  z-index: 2;
+}
+
+.mmc-welcome-card .ld-card-card {
+  background: #283645;
+  border-radius: 16px;
+}
+
+.mmc-welcome-card__cta {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mmc-link-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.mmc-panel {
+  background: var(--ld-semantic-color-background-secondary, #eef1f4);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.mmc-stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+}
+
+.mmc-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #283645;
+  color: #fff;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.mmc-history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mmc-history-list__item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--ld-semantic-color-border-subtle, #e3e4e5);
+}
+
+.mmc-journey {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  position: relative;
+}
+
+.mmc-journey__item {
+  display: flex;
+  gap: 12px;
+  padding-bottom: 24px;
+  position: relative;
+}
+
+.mmc-journey__item:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 22px;
+  bottom: 0;
+  width: 2px;
+  background: var(--ld-semantic-color-border-subtle, #e3e4e5);
+}
+
+.mmc-journey__dot {
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-top: 6px;
+  border: 2px solid var(--ld-semantic-color-border-emphasis, #909196);
+  background: #fff;
+}
+
+.mmc-journey__dot--unlocked {
+  background: var(--ld-semantic-color-fill-positive, #2a8703);
+  border-color: var(--ld-semantic-color-fill-positive, #2a8703);
+}
+
+/* ── Bottom tab nav ───────────────────────────────────────────────────── */
+
+.mmc-bottom-nav {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  border-top: 1px solid var(--ld-semantic-color-border-subtle, #e3e4e5);
+  background: var(--ld-semantic-color-background-surface, #fff);
+  z-index: 3;
+}
+
+.mmc-bottom-nav__item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 4px 12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  min-height: 48px;
+}
+
+.mmc-bottom-nav__item:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+/* ── Desktop stakeholder-review shell (§31) — never shown on mobile ──── */
+
+.mmc-stakeholder-shell {
+  flex: 1 1 420px;
+  max-width: 560px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px 32px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  color: #2b2f33;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.mmc-stakeholder-shell__eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #6b7280;
+  margin: 0 0 12px;
+}
+
+.mmc-stakeholder-shell__h2 {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 20px 0 6px;
+  color: #1b1f24;
+}
+
+.mmc-stakeholder-shell__example {
+  font-family: monospace;
+  font-size: 12.5px;
+  background: #f4f5f6;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.mmc-stakeholder-shell__footnote {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.mmc-phase-track {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.mmc-phase-track__item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e3e4e5;
+  min-width: 110px;
+}
+
+.mmc-phase-track__item strong {
+  font-size: 13px;
+}
+
+.mmc-phase-track__item span {
+  font-size: 12px;
+}
+
+.mmc-phase-track__item em {
+  font-style: normal;
+  font-size: 10.5px;
+  color: #6b7280;
+}
+
+.mmc-phase-track__item--current {
+  border-color: #283645;
+  background: #f4f6f8;
+}
+
+.mmc-phase-track__item--current em {
+  color: #283645;
+  font-weight: 700;
+}
+
+.mmc-phase-track__arrow {
+  color: #9aa0a6;
+}
+
+.mmc-dev-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.mmc-dev-controls button {
+  font-size: 12.5px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px dashed #9aa0a6;
+  background: #fafafa;
+  color: #33383d;
+  cursor: pointer;
+}
+
+.mmc-dev-controls button:hover {
+  background: #eef1f4;
+}
+
+/* ── Completion feedback sheet (InlineBottomSheet) ───────────────────────
+   Deliberately not the LD BottomSheet: that component portals to
+   document.body (via Overlay), which escapes the simulated phone frame on
+   desktop. This renders inline instead so it stays clipped to the device
+   screen there, while still covering the full viewport on real mobile. */
+
+.mmc-sheet-scrim {
+  z-index: 10;
+  background: rgba(27, 31, 36, 0.4);
+  display: flex;
+  align-items: flex-end;
+}
+
+.mmc-sheet-scrim--mobile {
+  position: fixed;
+  inset: 0;
+}
+
+.mmc-sheet-scrim--desktop {
+  position: absolute;
+  inset: 0;
+  border-radius: 26px;
+}
+
+.mmc-sheet-panel {
+  width: 100%;
+  max-height: 85%;
+  overflow-y: auto;
+  background: var(--ld-semantic-color-background-surface, #fff);
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.mmc-sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 16px 8px;
+}
+
+.mmc-sheet-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.mmc-sheet-content {
+  padding: 0 20px 20px;
+}
+
+.mmc-sheet-actions {
+  padding: 12px 20px 20px;
+}

@@ -4,6 +4,9 @@ import path from "node:path";
 import fs from "node:fs";
 
 export default defineConfig({
+  // GitHub Pages serves this from https://<org>.github.io/mmc-rewards-phase1c/,
+  // so all asset/router URLs must be prefixed with the repo name.
+  base: "/mmc-rewards-phase1c/",
   server: {
     port: 3099,
   },

@@ -21,12 +21,24 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: mmc-app/package-lock.json
       - name: Install dependencies
         working-directory: mmc-app
-        run: npm ci
+        # mmc-app/.npmrc points at Walmart's internal Artifactory registry and
+        # routes all traffic through Walmart's internal proxy — required on
+        # the Walmart network, but unreachable from GitHub-hosted runners.
+        # Every dependency here is a normal public package, so override the
+        # registry/proxy for this step only (CLI flags beat the committed
+        # .npmrc) rather than editing the file that local/Walmart-network
+        # installs still rely on.
+        run: >
+          npm ci
+          --registry=https://registry.npmjs.org/
+          --proxy=null
+          --https-proxy=null
+          --noproxy=*
       - name: Build (base path /mmc-rewards-phase1c/)
         working-directory: mmc-app
         run: npm run build

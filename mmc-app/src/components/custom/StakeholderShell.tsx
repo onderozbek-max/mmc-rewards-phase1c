@@ -45,18 +45,23 @@ export function StakeholderShell() {
 
       <h2 className="mmc-stakeholder-shell__h2">What 1C adds</h2>
       <p>
-        Successful participation now creates a visible and durable progression event: participate
-        → earn points → lifetime points update → progress toward the next benefit updates.
+        Eligible participation already updates the member's underlying lifetime points and
+        progression. Phase 1C makes that change immediate and explicit through a dedicated
+        post-completion feedback experience:
       </p>
       <p className="mmc-stakeholder-shell__example">
-        180 lifetime points → complete a 30-point activity → earn +30 points → 210 lifetime
-        points → 40 points until the next benefit
+        PARTICIPATE → EARN POINTS → SEE UPDATED LIFETIME POINTS → SEE UPDATED PROGRESS TOWARD THE
+        NEXT BENEFIT
+      </p>
+      <p className="mmc-stakeholder-shell__example">
+        180 lifetime points → complete a 30-point activity → "You earned 30 points" → 210
+        lifetime points → 40 points until the next benefit
       </p>
 
       <h2 className="mmc-stakeholder-shell__h2">What to evaluate</h2>
       <p>
-        Does the experience make the causal relationship clear and trustworthy? "I participated →
-        I earned points → my progress changed."
+        Does explicitly showing the earning and resulting progress make the relationship between
+        participation and Community Pass tangible and trustworthy?
       </p>
 
       <h2 className="mmc-stakeholder-shell__h2">What is not built yet</h2>
@@ -89,12 +94,13 @@ export function StakeholderShell() {
 
       <h2 className="mmc-stakeholder-shell__h2">What changed from the previous prototype</h2>
       <p>
-        <strong>Previous — 1B:</strong> Progress is connected to participation opportunities, but
-        completing an activity does not yet change Community Pass state.
+        <strong>Previous — 1B:</strong> Successful eligible participation updates the underlying
+        Community Pass state, but the member returns to the updated experience without a
+        dedicated progress-feedback moment.
       </p>
       <p>
-        <strong>This prototype — 1C:</strong> Completing an eligible activity now awards its
-        points, updates lifetime progress, and persists the resulting state.
+        <strong>This prototype — 1C:</strong> The same state change is now explicitly
+        communicated immediately after completion.
       </p>
 
       <h2 className="mmc-stakeholder-shell__h2">Prototype controls</h2>

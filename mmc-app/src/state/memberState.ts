@@ -83,9 +83,10 @@ function seedNearMilestone240(): CompletionRecord[] {
   ];
 }
 
-/** Scenario D — 270 lifetime points: past the 250 threshold already, used to
- *  demonstrate ordinary post-benefit earning (270 → +10 → 280) without
- *  replaying any milestone-crossing event. */
+/** Scenario D — 270 lifetime points: past the 250 threshold already. All
+ *  three catalog activities remain available (this seed never completes
+ *  them), so completing any one demonstrates ordinary post-benefit earning
+ *  without replaying any milestone-crossing event. */
 function seedPost250_270(): CompletionRecord[] {
   return [
     ...seedNearMilestone240(),

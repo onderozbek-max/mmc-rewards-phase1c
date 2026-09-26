@@ -8,8 +8,9 @@
  * cross the 250 threshold" — the sheet only ever asks "is there still an
  * active operational goal?" (`nextMilestone` !== null). That means the
  * crossing completion and every ordinary completion after it (e.g. a later
- * 270 → 280) render identically, so nothing ever reads as a one-time
- * milestone-achievement ceremony — that distinction belongs to 1D.
+ * completion once the member is already past 250) render identically, so
+ * nothing ever reads as a one-time milestone-achievement ceremony — that
+ * distinction belongs to 1D.
  */
 
 import * as React from 'react';

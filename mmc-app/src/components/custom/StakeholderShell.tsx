@@ -120,7 +120,7 @@ export function StakeholderShell() {
           Near Milestone — 240 pts (30-pt activity available)
         </button>
         <button type="button" onClick={() => resetToScenario('post-250-270')}>
-          First Milestone Achieved — 270 pts (10-pt activity available)
+          First Milestone Achieved — 270 pts (further activities available)
         </button>
         <button type="button" onClick={() => resetToScenario('baseline-180')}>
           Reset

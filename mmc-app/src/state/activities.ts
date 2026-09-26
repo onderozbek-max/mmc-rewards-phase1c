@@ -6,9 +6,17 @@
  * completed by the member is derived from the completion ledger in
  * `memberState.ts` (single source of truth) — never stored here.
  *
- * Includes at least one non-points-eligible activity (§17) so the product can
- * demonstrate that not every participation event changes Community Pass
- * progress.
+ * All three catalog activities are points-eligible and, by default, all three
+ * are still available (the seed history in `memberState.ts` never completes
+ * them). Their point values (30 + 20 + 30 = 80) are chosen deliberately: from
+ * the 180-point default starting balance, completing all three in the normal
+ * Home flow naturally crosses the 250-point benefit threshold (180 → 210 →
+ * 230 → 260) without any prototype/developer control. Do not change these
+ * point values independently of that demonstration journey.
+ *
+ * The non-points-eligible acknowledgement pattern in CompletionFeedbackSheet
+ * (§17) remains fully supported for any future activity with
+ * `pointsEligible: false` — none currently exists in this catalog.
  */
 
 export interface ActivityDef {
@@ -39,7 +47,7 @@ export const ACTIVITIES: ActivityDef[] = [
     id: 'act-tell-us-think',
     title: 'Tell us what you think',
     description: 'Share your take on products and experiences.',
-    points: 10,
+    points: 20,
     pointsEligible: true,
     endsAt: 'October 15, 2026',
     icon: 'Star',
@@ -47,9 +55,10 @@ export const ACTIVITIES: ActivityDef[] = [
   {
     id: 'act-quick-reaction',
     title: "How was today's visit?",
-    description: "Give quick feedback — this one's just for us, no points attached.",
-    points: 0,
-    pointsEligible: false,
+    description: "Share quick feedback about today's visit.",
+    points: 30,
+    pointsEligible: true,
+    endsAt: 'October 31, 2026',
     icon: 'Check',
   },
 ];

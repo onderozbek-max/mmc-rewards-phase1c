@@ -1,8 +1,15 @@
 /**
- * 1C completion feedback — the core "how did this activity move me?" moment
- * (§8–§12). Deliberately restrained: no confetti, no exclamation-point copy,
- * no milestone-celebration treatment (§9, §19 — that belongs to 1D). It
- * states the causal delta, then the resulting truthful state, in that order.
+ * 1C completion feedback — the core "how did this activity move me?" moment.
+ * Deliberately restrained: no confetti, no exclamation-point copy, no
+ * milestone-celebration treatment (that belongs to 1D). It states the causal
+ * delta, then the resulting truthful state, in that order.
+ *
+ * There is deliberately no special case for "this completion happened to
+ * cross the 250 threshold" — the sheet only ever asks "is there still an
+ * active operational goal?" (`nextMilestone` !== null). That means the
+ * crossing completion and every ordinary completion after it (e.g. a later
+ * 270 → 280) render identically, so nothing ever reads as a one-time
+ * milestone-achievement ceremony — that distinction belongs to 1D.
  */
 
 import * as React from 'react';
@@ -13,6 +20,7 @@ import { ProgressIndicator } from '../ProgressIndicator';
 import { VisuallyHidden } from '../VisuallyHidden';
 import { prevMilestone, nextMilestone } from '../../state/memberState';
 import type { CompletionResult } from '../../state/memberState';
+import { OPERATIONAL_BENEFIT_UNLOCKED_MESSAGE } from '../../state/benefits';
 
 export interface CompletionFeedbackSheetProps {
   result: CompletionResult | null;
@@ -42,7 +50,6 @@ export function CompletionFeedbackSheet({ result, onClose }: CompletionFeedbackS
     );
   }
 
-  const crossed250 = result.crossedMilestoneValues.includes(250);
   const prev = prevMilestone(result.newTotal);
   const next = nextMilestone(result.newTotal);
 
@@ -63,10 +70,6 @@ export function CompletionFeedbackSheet({ result, onClose }: CompletionFeedbackS
         </Heading>
 
         <Body as="p">{result.newTotal} lifetime points</Body>
-
-        {crossed250 && (
-          <Body as="p">Your 250-point benefit is now available.</Body>
-        )}
 
         {next !== null ? (
           <div>
@@ -90,7 +93,7 @@ export function CompletionFeedbackSheet({ result, onClose }: CompletionFeedbackS
             </Body>
           </div>
         ) : (
-          <Body as="p">You've reached every current benefit milestone.</Body>
+          <Body as="p">{OPERATIONAL_BENEFIT_UNLOCKED_MESSAGE}</Body>
         )}
       </div>
     </InlineBottomSheet>

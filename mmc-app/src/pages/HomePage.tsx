@@ -82,15 +82,25 @@ export function HomePage() {
               <Icon name="ChevronRight" decorative />
             </button>
             <ProgressToNextBenefit points={points} a11yLabelledBy="cp-benefit-heading" />
-            <Body as="p" id="cp-benefit-heading" weight="alt" UNSAFE_style={{ marginTop: 12 }}>
-              {next !== null ? BENEFIT_COPY[next]?.description : "You've reached every current benefit milestone."}
-            </Body>
+            {next !== null && (
+              <Body as="p" id="cp-benefit-heading" weight="alt" UNSAFE_style={{ marginTop: 12 }}>
+                {BENEFIT_COPY[next]?.description}
+              </Body>
+            )}
             <Caption color="subtle">{points} lifetime points</Caption>
           </CardContent>
         </Card>
 
+        {/* Before the 250 benefit is reached, this framing is the adopted 1B
+            motivational treatment ("ways to make progress" toward a specific
+            goal). Once that goal is fulfilled, there's no active benefit to
+            motivate progress toward, so the framing recedes to neutral
+            activity discovery (§11) — the same activities remain available,
+            just described without a progress-motivation angle. */}
         <Heading as="h2" size="medium" UNSAFE_style={{ margin: '20px 0 4px' }}>
-          Ways to make progress ({ALL_ACTIVITIES.length})
+          {next !== null
+            ? `Ways to make progress (${ALL_ACTIVITIES.length})`
+            : `Open Activities (${ALL_ACTIVITIES.length})`}
         </Heading>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>

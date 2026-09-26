@@ -43,7 +43,19 @@ export interface MemberState {
 }
 
 const STORE_KEY = 'mmc:phase1c:memberState';
-const MILESTONES = [250, 1000, 3000] as const;
+
+/**
+ * Only 250 is operational in this prototype: it is the sole milestone with a
+ * fulfilled benefit (What's New + Member Favorites), so it is the only value
+ * that drives an active progress bar, "points remaining" language, or 1C
+ * completion feedback. 1,000 and 3,000 are broader/future journey markers —
+ * displayed for context in the Community Pass benefit journey, but never an
+ * active goal (that operationalization is a later initiative, §23).
+ */
+const OPERATIONAL_MILESTONE = 250;
+
+/** All milestones shown in the Community Pass "benefit journey" list. */
+const JOURNEY_MILESTONES = [250, 1000, 3000] as const;
 
 // ── Seed data (representative prototype states, §32) ───────────────────────
 
@@ -68,6 +80,16 @@ function seedNearMilestone240(): CompletionRecord[] {
   return [
     ...seedBaseline180(),
     { id: 'seed-11', activityId: null, title: 'Early access engagement bonus', points: 60, completedAt: '2026-09-22', status: 'completed' },
+  ];
+}
+
+/** Scenario D — 270 lifetime points: past the 250 threshold already, used to
+ *  demonstrate ordinary post-benefit earning (270 → +10 → 280) without
+ *  replaying any milestone-crossing event. */
+function seedPost250_270(): CompletionRecord[] {
+  return [
+    ...seedNearMilestone240(),
+    { id: 'seed-12', activityId: null, title: 'Helped test a new community feature', points: 30, completedAt: '2026-09-24', status: 'completed' },
   ];
 }
 
@@ -116,31 +138,38 @@ export function lifetimePoints(state: MemberState): number {
     .reduce((sum, c) => sum + c.points, 0);
 }
 
-/** Highest milestone at or below `points`, or 0 if below the first milestone. */
+/**
+ * Start of the current progress range: 0 before the operational milestone,
+ * or the operational milestone itself once reached (there is no active
+ * range beyond it — 1,000/3,000 are not operationalized, §23).
+ */
 export function prevMilestone(points: number): number {
-  let prev = 0;
-  for (const m of MILESTONES) {
-    if (points >= m) prev = m;
-  }
-  return prev;
+  return points >= OPERATIONAL_MILESTONE ? OPERATIONAL_MILESTONE : 0;
 }
 
-/** First milestone strictly greater than `points`, or null if all are cleared. */
+/**
+ * The active operational goal, or null once it's been reached — null means
+ * "no active progress goal right now," not "every future milestone is also
+ * done." Only 250 is ever returned here by design.
+ */
 export function nextMilestone(points: number): number | null {
-  return MILESTONES.find((m) => m > points) ?? null;
+  return points >= OPERATIONAL_MILESTONE ? null : OPERATIONAL_MILESTONE;
 }
 
 export function pointsRemaining(points: number): number {
-  const next = nextMilestone(points);
-  return next === null ? 0 : next - points;
+  return points >= OPERATIONAL_MILESTONE ? 0 : OPERATIONAL_MILESTONE - points;
 }
 
+/** Journey milestones the member has reached — in this prototype that will
+ *  only ever practically be 250, since 1,000/3,000 aren't operationalized. */
 export function unlockedMilestones(points: number): number[] {
-  return MILESTONES.filter((m) => points >= m);
+  return JOURNEY_MILESTONES.filter((m) => points >= m);
 }
 
+/** Full benefit-journey list for display (Community Pass), including the
+ *  non-operational future markers. */
 export function allMilestones(): readonly number[] {
-  return MILESTONES;
+  return JOURNEY_MILESTONES;
 }
 
 export function isActivityCompleted(state: MemberState, activityId: string): boolean {
@@ -251,10 +280,15 @@ export function completeActivity(activityId: string): CompletionResult {
 
 // ── Prototype-only controls (§5, §31, §32) — never exposed in member UI ──
 
-export type ScenarioKey = 'baseline-180' | 'near-milestone-240';
+export type ScenarioKey = 'baseline-180' | 'near-milestone-240' | 'post-250-270';
 
 export function resetToScenario(scenario: ScenarioKey): void {
-  const completions = scenario === 'near-milestone-240' ? seedNearMilestone240() : seedBaseline180();
+  const completions =
+    scenario === 'near-milestone-240'
+      ? seedNearMilestone240()
+      : scenario === 'post-250-270'
+        ? seedPost250_270()
+        : seedBaseline180();
   saveMemberState({
     memberName: 'Onder',
     memberSinceLabel: 'June 2026',

@@ -4,15 +4,18 @@
  * so both surfaces are guaranteed to agree (§3, §29).
  *
  * The progress bar range is `prevMilestone → nextMilestone`, derived fresh
- * from the current point total every render — NOT a hardcoded `0…250`. This
- * is what keeps the bar correct after a milestone crossing (§18): at 270
- * points the range becomes 250…1000, not 0…250.
+ * from the current point total every render — NOT a hardcoded `0…250`. Only
+ * 250 is operational in this prototype (§23), so once a member reaches it
+ * there is no further active range to render (1,000/3,000 are future journey
+ * markers, not a live goal) — this component switches to a truthful
+ * "already unlocked" statement instead.
  */
 
 import * as React from 'react';
 import { ProgressIndicator } from '../ProgressIndicator';
 import { Body, Caption } from '../Text';
 import { nextMilestone, prevMilestone, pointsRemaining } from '../../state/memberState';
+import { OPERATIONAL_BENEFIT_UNLOCKED_MESSAGE } from '../../state/benefits';
 
 export interface ProgressToNextBenefitProps {
   points: number;
@@ -27,7 +30,7 @@ export function ProgressToNextBenefit({ points, a11yLabelledBy }: ProgressToNext
   if (next === null) {
     return (
       <Body as="p" color="subtle">
-        You've reached every current benefit milestone.
+        {OPERATIONAL_BENEFIT_UNLOCKED_MESSAGE}
       </Body>
     );
   }

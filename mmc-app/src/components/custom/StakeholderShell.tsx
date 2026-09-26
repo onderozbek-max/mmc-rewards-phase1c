@@ -1,78 +1,89 @@
 /**
- * Desktop-only stakeholder-review panel (§31). Explanatory metadata about the
+ * Desktop-only stakeholder-review panel. Explanatory metadata about the
  * prototyping strategy — never part of the simulated MMC mobile product, and
  * never rendered at mobile viewport widths (see AppShell).
  *
- * Also hosts the prototype-only reset/scenario controls (§5, §32). These are
- * NOT member-facing MMC functionality — they exist purely so stakeholders can
- * replay the demo from a known state, which is why they live here rather than
- * anywhere inside the simulated phone screen.
+ * Also hosts the prototype-only reset/scenario controls. These are NOT
+ * member-facing MMC functionality — they exist purely so stakeholders can
+ * replay the demo from a known state, which is why they live here rather
+ * than anywhere inside the simulated phone screen.
  */
 
 import * as React from 'react';
 import { resetToScenario } from '../../state/memberState';
 
 const PHASES = [
-  { id: '1a', name: '1A', label: 'Rewards Journey', tag: 'FOUNDATION', mark: '✓', current: false },
-  { id: '1b', name: '1B', label: 'Progress Motivation', tag: 'ASSUMED ADOPTED FOR THIS PROTOTYPE', mark: '✓*', current: false },
+  { id: '1a', name: '1A', label: 'Progression Foundation', tag: 'COMPLETE', mark: '✓', current: false },
+  { id: '1b', name: '1B', label: 'Progress Motivation', tag: 'ASSUMED ADOPTED', mark: '✓*', current: false },
   { id: '1c', name: '1C', label: 'Earn & Progress Feedback', tag: 'CURRENT', mark: '', current: true },
-  { id: '1d', name: '1D', label: 'Milestone Achievement & Unlocks', tag: 'NEXT', mark: '', current: false },
+  { id: '1d', name: '1D', label: 'Milestone Achievement Experience', tag: 'NEXT', mark: '', current: false },
+  { id: '1e', name: '1E', label: 'Full Milestone & Benefit Expansion', tag: 'FUTURE', mark: '', current: false },
+  { id: '1f', name: '1F', label: 'Historical Reconciliation & Full Population Rollout', tag: 'FUTURE', mark: '', current: false },
 ] as const;
 
 export function StakeholderShell() {
   return (
     <aside className="mmc-stakeholder-shell" aria-label="Prototype context for stakeholders">
       <p className="mmc-stakeholder-shell__eyebrow">PHASE 1C — EARN &amp; PROGRESS FEEDBACK</p>
+      <p className="mmc-stakeholder-shell__footnote">
+        <strong>Initiative type:</strong> Build + Measure
+      </p>
 
       <h2 className="mmc-stakeholder-shell__h2">Foundation</h2>
       <p>
-        Phase 1A establishes the functional Community Pass journey: what points mean, current
-        progress, the next milestone, and the benefit.
-      </p>
-
-      <h2 className="mmc-stakeholder-shell__h2">Assumption for this prototype</h2>
-      <p>
-        This prototype assumes the Phase 1B Progress Motivation experiment produced a positive
-        result and its treatment was adopted. Therefore this prototype carries forward Phase 1A +
-        adopted Phase 1B + the new Phase 1C capability.
+        Phase 1A already provides truthful earning, milestone calculation, and benefit
+        fulfillment.
       </p>
       <p>
-        This assumption is for prototyping the positive-path end state. It does <strong>not</strong>{' '}
-        pre-decide the actual Phase 1B experiment. If Phase 1B does not demonstrate sufficient
-        incremental value, Phase 1C still builds on the Phase 1A functional baseline without the
-        rejected motivational-progress layer.
+        For this forward-looking prototype, assume the Phase 1B Progress Motivation experiment
+        was positive and its treatment was adopted.
       </p>
 
       <h2 className="mmc-stakeholder-shell__h2">What 1C adds</h2>
       <p>
-        Eligible participation already updates the member's underlying lifetime points and
-        progression. Phase 1C makes that change immediate and explicit through a dedicated
-        post-completion feedback experience:
+        1C does <strong>not</strong> introduce point earning. It makes the effect of successful
+        participation immediate and explicit:
       </p>
       <p className="mmc-stakeholder-shell__example">
-        PARTICIPATE → EARN POINTS → SEE UPDATED LIFETIME POINTS → SEE UPDATED PROGRESS TOWARD THE
-        NEXT BENEFIT
+        PARTICIPATE → EARN POINTS → SEE UPDATED LIFETIME POINTS → SEE UPDATED PROGRESS
       </p>
       <p className="mmc-stakeholder-shell__example">
-        180 lifetime points → complete a 30-point activity → "You earned 30 points" → 210
-        lifetime points → 40 points until the next benefit
+        180 → complete a 30-point activity → You earned 30 points → 210 lifetime points → 40
+        points until the 250 benefit
+      </p>
+
+      <h2 className="mmc-stakeholder-shell__h2">Threshold crossing</h2>
+      <p>
+        If activity-driven progress crosses 250, the underlying product already makes What's New
+        + Member Favorites available. 1C represents the resulting state truthfully but does not
+        yet add the rich milestone-achievement experience.
       </p>
 
       <h2 className="mmc-stakeholder-shell__h2">What to evaluate</h2>
       <p>
-        Does explicitly showing the earning and resulting progress make the relationship between
+        Does explicit earn-and-progress feedback make the causal relationship between
         participation and Community Pass tangible and trustworthy?
+      </p>
+
+      <h2 className="mmc-stakeholder-shell__h2">What changed from 1B</h2>
+      <p>
+        <strong>1B:</strong> successful participation updates the product state, but the member
+        returns to that updated state without a dedicated causal-feedback moment.
+      </p>
+      <p>
+        <strong>1C:</strong> the same state change is explicitly communicated immediately after
+        completion.
       </p>
 
       <h2 className="mmc-stakeholder-shell__h2">What is not built yet</h2>
       <p>
-        Phase 1D adds the complete milestone-achievement experience when a member reaches 250
-        points: milestone reached → benefit unlocked → achievement recognized → next milestone
-        established.
+        <strong>1D:</strong> Milestone Achievement Experience
       </p>
       <p>
-        1C must maintain truthful milestone state if a member crosses 250, but the full
-        achievement/unlock experience is intentionally deferred to 1D.
+        <strong>1E:</strong> Full Milestone &amp; Benefit Expansion
+      </p>
+      <p>
+        <strong>1F:</strong> Historical Reconciliation &amp; Full Population Rollout
       </p>
 
       <h2 className="mmc-stakeholder-shell__h2">Phase progression</h2>
@@ -89,18 +100,9 @@ export function StakeholderShell() {
         ))}
       </div>
       <p className="mmc-stakeholder-shell__footnote">
-        *1B carries forward here only under the assumed positive experiment outcome.
-      </p>
-
-      <h2 className="mmc-stakeholder-shell__h2">What changed from the previous prototype</h2>
-      <p>
-        <strong>Previous — 1B:</strong> Successful eligible participation updates the underlying
-        Community Pass state, but the member returns to the updated experience without a
-        dedicated progress-feedback moment.
-      </p>
-      <p>
-        <strong>This prototype — 1C:</strong> The same state change is now explicitly
-        communicated immediately after completion.
+        *1B carries forward in this prototype under an assumed positive experiment outcome. A
+        negative result would remove/simplify that optional motivational layer without affecting
+        1C.
       </p>
 
       <h2 className="mmc-stakeholder-shell__h2">Prototype controls</h2>
@@ -114,6 +116,9 @@ export function StakeholderShell() {
         </button>
         <button type="button" onClick={() => resetToScenario('near-milestone-240')}>
           Scenario C — 240 pts (near milestone)
+        </button>
+        <button type="button" onClick={() => resetToScenario('post-250-270')}>
+          Scenario D — 270 pts (post-250)
         </button>
       </div>
     </aside>

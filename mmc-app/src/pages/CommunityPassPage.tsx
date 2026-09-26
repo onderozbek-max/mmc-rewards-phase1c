@@ -13,7 +13,7 @@ import {
   nextMilestone,
   allMilestones,
 } from '../state/memberState';
-import { BENEFIT_COPY } from '../state/benefits';
+import { BENEFIT_COPY, MILESTONE_BENEFITS } from '../state/benefits';
 
 export function CommunityPassPage() {
   const state = useMemberState();
@@ -82,6 +82,7 @@ export function CommunityPassPage() {
           {allMilestones().map((milestone) => {
             const unlocked = points >= milestone;
             const isNext = milestone === next;
+            const namedBenefits = MILESTONE_BENEFITS[milestone];
             return (
               <li key={milestone} className="mmc-journey__item">
                 <span
@@ -105,6 +106,25 @@ export function CommunityPassPage() {
                     )}
                   </div>
                   <Body as="p">{BENEFIT_COPY[milestone]?.description}</Body>
+                  {/* Named individual benefits (currently only 250 has any) —
+                      each shown as its own accessible/locked state so the
+                      real benefit names, not just the milestone, are
+                      verifiable at a glance. */}
+                  {namedBenefits && (
+                    <div style={{ display: 'flex', gap: 8, marginTop: 6, flexWrap: 'wrap' }}>
+                      {namedBenefits.map((name) =>
+                        unlocked ? (
+                          <Tag key={name} color="green" size="small" leading={<Icon name="CheckCircle" decorative />}>
+                            {name} accessible
+                          </Tag>
+                        ) : (
+                          <Caption key={name} color="subtle">
+                            {name} (locked)
+                          </Caption>
+                        ),
+                      )}
+                    </div>
+                  )}
                 </div>
               </li>
             );

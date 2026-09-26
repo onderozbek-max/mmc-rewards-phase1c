@@ -107,18 +107,23 @@ export function StakeholderShell() {
 
       <h2 className="mmc-stakeholder-shell__h2">Prototype controls</h2>
       <p className="mmc-stakeholder-shell__footnote">
-        Development-only. Restores a representative member state for replaying the demo. Not part
-        of the MMC member experience.
+        Development-only. Deterministically initializes one coherent member state — lifetime
+        points, milestone status, and which activities remain available — so the 250-point
+        boundary can be tested without completing an unrealistic number of mock activities. Not
+        part of the MMC member experience.
       </p>
       <div className="mmc-dev-controls">
         <button type="button" onClick={() => resetToScenario('baseline-180')}>
-          Scenario A/B — 180 pts
+          Normal Progression — 180 pts
         </button>
         <button type="button" onClick={() => resetToScenario('near-milestone-240')}>
-          Scenario C — 240 pts (near milestone)
+          Near Milestone — 240 pts (30-pt activity available)
         </button>
         <button type="button" onClick={() => resetToScenario('post-250-270')}>
-          Scenario D — 270 pts (post-250)
+          First Milestone Achieved — 270 pts (10-pt activity available)
+        </button>
+        <button type="button" onClick={() => resetToScenario('baseline-180')}>
+          Reset
         </button>
       </div>
     </aside>

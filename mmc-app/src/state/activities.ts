@@ -18,11 +18,12 @@
  * (§17) remains fully supported for any future activity with
  * `pointsEligible: false` — none currently exists in this catalog.
  *
- * A fourth activity (`act-post-milestone-bonus`, 10 points) exists solely so
- * ordinary post-250 earning can be exercised through normal Home interaction
- * once the three journey activities are complete (260 total). It is never
- * required to reach or preserve the 250 crossing and is not part of that
- * point economics — it is additional supply, not a replacement.
+ * This is the CANONICAL stakeholder catalog — exactly the three activities
+ * the default/reset journey depends on (30 + 20 + 30 = 80, crossing 250 from
+ * a 180 start). Do not add a fourth activity here to test post-250 ordinary
+ * earning; that would change the default stakeholder journey's activity
+ * supply. Use `QA_ONLY_ACTIVITIES` below instead, which is never part of the
+ * normal member-facing catalog.
  */
 
 export interface ActivityDef {
@@ -67,17 +68,30 @@ export const ACTIVITIES: ActivityDef[] = [
     endsAt: 'October 31, 2026',
     icon: 'Check',
   },
+];
+
+/**
+ * Prototype/QA-only activity — never rendered in the normal stakeholder
+ * journey and never included in `ACTIVITIES`. It exists solely so a
+ * developer/QA scenario can exercise ordinary earning feedback *after* the
+ * 250 benefit has already been unlocked (e.g. 260 → +10 → 270), without
+ * adding a fourth activity to the canonical 180→210→230→260 demo journey.
+ * `HomePage` only renders this when the member state's
+ * `qaPostMilestoneActive` flag is set, which only a prototype-only QA
+ * scenario (`resetToScenario('post-milestone-qa-260')`) ever sets to true.
+ */
+export const QA_ONLY_ACTIVITIES: ActivityDef[] = [
   {
-    id: 'act-post-milestone-bonus',
-    title: 'Rate our newest feature',
-    description: 'Tell us what you think of our newest addition.',
+    id: 'qa-post-milestone-bonus',
+    title: 'QA: post-milestone bonus activity',
+    description:
+      'Prototype-only activity for verifying ordinary earning feedback after the 250 benefit is already unlocked. Not part of the member-facing catalog.',
     points: 10,
     pointsEligible: true,
-    endsAt: 'December 1, 2026',
     icon: 'Star',
   },
 ];
 
 export function getActivity(id: string): ActivityDef | undefined {
-  return ACTIVITIES.find((a) => a.id === id);
+  return ACTIVITIES.find((a) => a.id === id) ?? QA_ONLY_ACTIVITIES.find((a) => a.id === id);
 }

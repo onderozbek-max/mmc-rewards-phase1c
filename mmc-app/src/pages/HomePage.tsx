@@ -13,7 +13,7 @@ import {
   lifetimePoints,
   isActivityCompleted,
   nextMilestone,
-  ALL_ACTIVITIES,
+  visibleActivities,
 } from '../state/memberState';
 import type { CompletionResult } from '../state/memberState';
 import { BENEFIT_COPY } from '../state/benefits';
@@ -26,6 +26,7 @@ export function HomePage() {
   const points = lifetimePoints(state);
   const completedCount = state.completions.filter((c) => c.status === 'completed').length;
   const next = nextMilestone(points);
+  const activities = visibleActivities(state);
 
   // A just-completed activity surfaces its 1C feedback sheet once, on return
   // to Home (§13). We read it from the shared event store rather than route
@@ -99,12 +100,12 @@ export function HomePage() {
             just described without a progress-motivation angle. */}
         <Heading as="h2" size="medium" UNSAFE_style={{ margin: '20px 0 4px' }}>
           {next !== null
-            ? `Ways to make progress (${ALL_ACTIVITIES.length})`
-            : `Open Activities (${ALL_ACTIVITIES.length})`}
+            ? `Ways to make progress (${activities.length})`
+            : `Open Activities (${activities.length})`}
         </Heading>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {ALL_ACTIVITIES.map((activity) => (
+          {activities.map((activity) => (
             <ActivityCard
               key={activity.id}
               activity={activity}

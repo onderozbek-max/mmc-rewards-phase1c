@@ -4,13 +4,23 @@
  * milestone-celebration treatment (that belongs to 1D). It states the causal
  * delta, then the resulting truthful state, in that order.
  *
- * There is deliberately no special case for "this completion happened to
- * cross the 250 threshold" — the sheet only ever asks "is there still an
- * active operational goal?" (`nextMilestone` !== null). That means the
- * crossing completion and every ordinary completion after it (e.g. a later
- * completion once the member is already past 250) render identically, so
- * nothing ever reads as a one-time milestone-achievement ceremony — that
- * distinction belongs to 1D.
+ * Three distinct render states, driven only by truthful before/after
+ * milestone facts — never a one-time celebration flag:
+ *   1. Still below 250 (`newNextMilestone !== null`) — progress bar + points
+ *      remaining.
+ *   2. This completion is the one that just crossed 250
+ *      (`previousNextMilestone !== null && newNextMilestone === null`) — the
+ *      benefit-unlocked statement is truthfully caused by THIS completion,
+ *      so it's shown once, here.
+ *   3. Ordinary earning after 250 was already achieved *before* this
+ *      completion started (`previousNextMilestone === null`) — the member
+ *      did not just unlock anything, so the unlocked statement is
+ *      deliberately NOT repeated (that would misrepresent this completion as
+ *      the cause). Feedback stays to activity complete + points earned +
+ *      resulting lifetime total, exactly like case 1 minus the progress bar
+ *      (there is no active goal left to show progress toward).
+ * This still has no special "milestone ceremony" case — case 2 is truthful
+ * state, not celebration — that richer treatment belongs to 1D.
  */
 
 import * as React from 'react';
@@ -53,6 +63,9 @@ export function CompletionFeedbackSheet({ result, onClose }: CompletionFeedbackS
 
   const prev = prevMilestone(result.newTotal);
   const next = nextMilestone(result.newTotal);
+  // True only for the one completion that actually caused the crossing —
+  // not for any later completion once the member is already past 250.
+  const justCrossed = result.previousNextMilestone !== null && next === null;
 
   return (
     <InlineBottomSheet
@@ -93,9 +106,9 @@ export function CompletionFeedbackSheet({ result, onClose }: CompletionFeedbackS
               {result.newRemaining} points until your next benefit
             </Body>
           </div>
-        ) : (
+        ) : justCrossed ? (
           <Body as="p">{OPERATIONAL_BENEFIT_UNLOCKED_MESSAGE}</Body>
-        )}
+        ) : null}
       </div>
     </InlineBottomSheet>
   );

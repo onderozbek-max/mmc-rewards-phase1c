@@ -14,7 +14,8 @@
  */
 
 import { getStoreValue, hydrateStoreValue, setStoreValue, useStore } from '../utils/store';
-import { ACTIVITIES, getActivity } from './activities';
+import { ACTIVITIES, QA_ONLY_ACTIVITIES, getActivity } from './activities';
+import type { ActivityDef } from './activities';
 
 // ── Types ────────────────────────────────────────────────────────────────
 
@@ -40,6 +41,11 @@ export interface MemberState {
   memberName: string;
   memberSinceLabel: string;
   completions: CompletionRecord[];
+  /** Prototype/QA-only visibility flag for `QA_ONLY_ACTIVITIES` (§ post-250
+   *  QA scenario). False in every normal/default/reset state — only the
+   *  dedicated QA scenario ever sets this true. Never toggled by normal
+   *  member interaction. */
+  qaPostMilestoneActive: boolean;
 }
 
 const STORE_KEY = 'mmc:phase1c:memberState';
@@ -99,6 +105,7 @@ function defaultMemberState(): MemberState {
     memberName: 'Onder',
     memberSinceLabel: 'June 2026',
     completions: seedBaseline180(),
+    qaPostMilestoneActive: false,
   };
 }
 
@@ -171,6 +178,17 @@ export function unlockedMilestones(points: number): number[] {
  *  non-operational future markers. */
 export function allMilestones(): readonly number[] {
   return JOURNEY_MILESTONES;
+}
+
+/**
+ * Activities the normal Home feed should render for the current member
+ * state. Always exactly the canonical three-activity stakeholder catalog,
+ * plus the prototype/QA-only bonus activity when (and only when) the
+ * dedicated post-250 QA scenario has activated it — never through normal
+ * progression, and never surviving a Reset to any of the three normal
+ * scenarios. */
+export function visibleActivities(state: MemberState): ActivityDef[] {
+  return state.qaPostMilestoneActive ? [...ACTIVITIES, ...QA_ONLY_ACTIVITIES] : ACTIVITIES;
 }
 
 export function isActivityCompleted(state: MemberState, activityId: string): boolean {
@@ -281,9 +299,36 @@ export function completeActivity(activityId: string): CompletionResult {
 
 // ── Prototype-only controls (§5, §31, §32) — never exposed in member UI ──
 
-export type ScenarioKey = 'baseline-180' | 'near-milestone-240' | 'post-250-270';
+export type ScenarioKey =
+  | 'baseline-180'
+  | 'near-milestone-240'
+  | 'post-250-270'
+  | 'post-milestone-qa-260';
+
+/** Scenario QA — 260 lifetime points, 250 already achieved via the three
+ *  canonical catalog activities (so they correctly show as Completed), with
+ *  the prototype/QA-only bonus activity switched on so a developer can
+ *  exercise ordinary post-250 earning (260 → +10 → 270) without adding a
+ *  fourth activity to the normal stakeholder catalog. */
+function seedPostMilestoneQa260(): CompletionRecord[] {
+  return [
+    ...seedBaseline180(),
+    { id: 'qa-crossing-1', activityId: 'act-shape-products', title: 'See how members help shape products', points: 30, completedAt: '2026-09-24', status: 'completed' },
+    { id: 'qa-crossing-2', activityId: 'act-tell-us-think', title: 'Tell us what you think', points: 20, completedAt: '2026-09-25', status: 'completed' },
+    { id: 'qa-crossing-3', activityId: 'act-quick-reaction', title: "How was today's visit?", points: 30, completedAt: '2026-09-26', status: 'completed' },
+  ];
+}
 
 export function resetToScenario(scenario: ScenarioKey): void {
+  if (scenario === 'post-milestone-qa-260') {
+    saveMemberState({
+      memberName: 'Onder',
+      memberSinceLabel: 'June 2026',
+      completions: seedPostMilestoneQa260(),
+      qaPostMilestoneActive: true,
+    });
+    return;
+  }
   const completions =
     scenario === 'near-milestone-240'
       ? seedNearMilestone240()
@@ -294,7 +339,6 @@ export function resetToScenario(scenario: ScenarioKey): void {
     memberName: 'Onder',
     memberSinceLabel: 'June 2026',
     completions,
+    qaPostMilestoneActive: false,
   });
 }
-
-export const ALL_ACTIVITIES = ACTIVITIES;

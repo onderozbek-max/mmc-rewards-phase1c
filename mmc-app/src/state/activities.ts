@@ -17,6 +17,12 @@
  * The non-points-eligible acknowledgement pattern in CompletionFeedbackSheet
  * (§17) remains fully supported for any future activity with
  * `pointsEligible: false` — none currently exists in this catalog.
+ *
+ * A fourth activity (`act-post-milestone-bonus`, 10 points) exists solely so
+ * ordinary post-250 earning can be exercised through normal Home interaction
+ * once the three journey activities are complete (260 total). It is never
+ * required to reach or preserve the 250 crossing and is not part of that
+ * point economics — it is additional supply, not a replacement.
  */
 
 export interface ActivityDef {
@@ -60,6 +66,15 @@ export const ACTIVITIES: ActivityDef[] = [
     pointsEligible: true,
     endsAt: 'October 31, 2026',
     icon: 'Check',
+  },
+  {
+    id: 'act-post-milestone-bonus',
+    title: 'Rate our newest feature',
+    description: 'Tell us what you think of our newest addition.',
+    points: 10,
+    pointsEligible: true,
+    endsAt: 'December 1, 2026',
+    icon: 'Star',
   },
 ];
 

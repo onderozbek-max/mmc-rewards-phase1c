@@ -135,8 +135,7 @@ export function CommunityPassPage() {
           How points are earned
         </Heading>
         <Body as="p">
-          Eligible Community activities show how many points you can earn before you start. Not
-          every activity is points-eligible.
+          Eligible Community activities show how many points you can earn before you start.
         </Body>
       </div>
     </Page>
